@@ -1,17 +1,17 @@
 import './App.css';
-import { Navbar } from './components/Navbar';
-import { Body } from './components/Body';
-import { Footer } from './components/Footer';
-
+import {BrowserRouter} from 'react-router-dom'
+import CustomRoutes from './allRouters/CustomRoutes';
 
 function App() {
   return (
-    <div className="">
-       <Navbar />
-       <Body />
-       <Footer />
-    </div>
+    <BrowserRouter>
+       <div>
+        <CustomRoutes/>
+       </div>
+       </BrowserRouter>
+   
   );
 }
+
 
 export default App;

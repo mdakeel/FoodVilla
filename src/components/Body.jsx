@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { restaurantList } from '../constant'
 import { RestrauntCard } from './RestaurantCard'
+import { Shimmer } from './Shimmer';
+import { NavLink } from 'react-router-dom';
+import { RESTAURANT_CARD_API } from '../constant';
 
 function filterData(search, restaurants){
-    return restaurants.filter((restaurant) => restaurant.data.name.includes(search));
+    return restaurants.filter((restaurant) => restaurant?.info?.name?.toLowerCase()?.includes(search.toLowerCase()));
 }
 
 export const Body = () => {
-    const [restaurants, setRestaurants] = useState(restaurantList);
+    const [allRestaurants, setAllRestaurants] = useState([])
+    const [filteredRestaurants, setFilteredRestaurants] = useState([]);
     const [search, setSearch] = useState("");
 
     useEffect(() => {
@@ -16,15 +19,27 @@ export const Body = () => {
     }, [])
 
     async function getRestaurants() {
-        const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING")
+        const data = await fetch(RESTAURANT_CARD_API)
         const json = await data.json();
-        // console.log(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants[0])
-        setRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+        console.log(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+
+        // Optional chaining
+        setAllRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+        setFilteredRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
     }
 
-    return (
+    // Conditional Rendering
+    // if restaurants is empty = shimmer ui show
+    // if restaurants has data = actual data UI show
+
+    //not component render early return
+    if(!allRestaurants) return null
+    
+    // if(filteredRestaurants.length === 0 ) return <h1 className='px-20 pt-5'>Data Not Found</h1>
+
+    return allRestaurants.length === 0  ? ( <Shimmer /> ) : (
         <>
-            <div className='ps-20 pt-4'>
+            <div className='ps-20 pt-5'>
                 <input
                     type="search" 
                     name="" id="" 
@@ -34,29 +49,31 @@ export const Body = () => {
                         // e.target.value    wherever we want to change and input a value in input field
                         setSearch(e.target.value);
                     }}
-                    className='outline-none border border-gray-tartiary p-[10px] text-[16px] font-normal focus:border-primary w-[30%] ' 
+                    className='outline-none border border-gray-tartiary p-[10px] text-[16px] font-normal focus:border-primary w-[25%] ' 
                 />
                 <button 
               
                 onClick={() => {
                       //need to filter data
-                    const data = filterData(search, restaurants)
+                    const data = filterData(search, allRestaurants)
 
                     // update the state = restaurant
-                    setRestaurants(data);
+                    setFilteredRestaurants(data);
                 }}
                 
                 className='p-[10px] px-4 bg-primary border border-primary font-semibold text-white  transition-all duration-300'>Search</button>
             </div>
 
-
-            <div className='flex  px-20 pt-6 grid grid-cols-5 gap-6 w-[100%]'>
+          
+            <div className='flex  px-20 pt-6 grid xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4 w-[100%]'>
                 {
-                    restaurants.map((res) => {
-                        return <RestrauntCard key={res?.info?.id} {...res.info} />
+                    filteredRestaurants.map((res) => {
+                        return <NavLink to={"/restaurant/" + res.info.id }  key={res?.info?.id} ><RestrauntCard  {...res.info} /></NavLink>
                     })
                 }
             </div>
+            
+            
         </>
     )
 }
