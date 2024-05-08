@@ -3,7 +3,7 @@ import { IMG_CDN_URL } from '../constant'
 
 export const RestrauntCard = ({name, cuisines, cloudinaryImageId, avgRating}) => {
     return(
-    <div className='border border-gray-300 p-2 w-full shadow-xl max-h-[300px] min-h-[300px] hover:shadow-none transition-all duration-100 cursor-pointer'>
+    <div className='border overflow-y-hidden border-gray-300 p-2 w-full shadow-xl max-h-[300px] min-h-[300px] hover:shadow-none transition-all duration-100 cursor-pointer'>
       <div className='flex flex-col items-center w-full '>
         <img className='w-full h-[150px]' src={IMG_CDN_URL + cloudinaryImageId} alt='img'/>
          

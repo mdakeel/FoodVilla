@@ -8,6 +8,7 @@ import { Contact } from '../components/Contact';
 import { AppLayout } from './AppLayout';
 import { Body } from '../components/Body';
 import { RestaurantCardDetails } from '../components/RestaurantCardDetails';
+import { Cart } from '../components/Cart';
 
 export default function CustomRoutes() {
   return (
@@ -20,6 +21,9 @@ export default function CustomRoutes() {
 
     {/* Contact Route */}
       <Route path="/contact" element={<AppLayout><Contact /></AppLayout>} />
+
+    {/* Cart Route */}
+    <Route path="/cart" element={<AppLayout><Cart /></AppLayout>} />
 
     {/* Contact Route */}
      <Route path="/restaurant/:id" element={<AppLayout><RestaurantCardDetails /></AppLayout>} />

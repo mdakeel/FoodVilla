@@ -3,10 +3,8 @@ import { RestrauntCard } from './RestaurantCard'
 import { Shimmer } from './Shimmer';
 import { NavLink } from 'react-router-dom';
 import { RESTAURANT_CARD_API } from '../constant';
-
-function filterData(search, restaurants){
-    return restaurants.filter((restaurant) => restaurant?.info?.name?.toLowerCase()?.includes(search.toLowerCase()));
-}
+import { filterData } from '../utils/Helper';
+import useOnline from '../utils/useOnline';
 
 export const Body = () => {
     const [allRestaurants, setAllRestaurants] = useState([])
@@ -26,6 +24,12 @@ export const Body = () => {
         // Optional chaining
         setAllRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
         setFilteredRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+    }
+
+    const isOnline = useOnline();
+
+    if(!isOnline){
+        return <h1 className='px-20 flex h-96 items-center justify-center text-[30px] text-gray-400'>Opps!, please check your internet connection!!</h1>
     }
 
     // Conditional Rendering
