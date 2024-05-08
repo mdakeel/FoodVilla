@@ -6,7 +6,7 @@ export const Contact = () => {
     <h1>Contact Us Page</h1>
     <p>
         {" "}
-        This is Contact US page , TOday we'll learn finding the path using React Router Dom
+        This is Contact US page 
     </p>
 </div>
   )
